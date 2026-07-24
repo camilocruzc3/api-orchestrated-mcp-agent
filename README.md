@@ -8,11 +8,12 @@ Programmatic AI agent orchestrated through the OpenAI API, with local MCP tools,
 
 - A Python application that owns the complete agent execution loop.
 - OpenAI Responses API for reasoning and function calling.
-- A local MCP server that exposes reusable business tools.
+- A local MCP server that exposes reusable operational tools.
 - Runtime discovery and conversion of MCP tools into OpenAI function tools.
 - Deterministic policy checks before side-effecting actions.
-- Human review fallback for sensitive, incomplete or high-risk requests.
+- Human-review fallback for sensitive, incomplete or high-risk requests.
 - Controlled tool-call limits, JSON validation and error handling.
+- Optional FastAPI interface and command-line demo.
 - Clear separation between model reasoning, orchestration, policy and tool execution.
 
 ## Architecture
@@ -50,7 +51,7 @@ In this project, the Python application itself is the orchestrator. It calls the
 
 ## Public demo scenario
 
-The public version processes generic operational requests:
+The public version processes synthetic operational requests:
 
 1. Classify the request.
 2. Extract structured fields without inventing values.
@@ -58,8 +59,6 @@ The public version processes generic operational requests:
 4. Apply deterministic policy checks.
 5. Execute the tool or request human review.
 6. Save a final processing record.
-
-Example tools:
 
 | Tool | Purpose |
 | --- | --- |
@@ -70,7 +69,7 @@ Example tools:
 
 ## Execution policy
 
-Side-effecting tools are checked locally before execution. A request is redirected to human review when, for example:
+Side-effecting tools are checked locally before execution. A request is redirected to human review when:
 
 - Critical data is missing or unconfirmed.
 - The request is marked as sensitive.
@@ -83,31 +82,57 @@ These controls are implemented in Python rather than relying only on prompt inst
 ## Project structure
 
 ```text
-README.md
-.env.example
-requirements.txt
-pyproject.toml
-assets/
-  screenshots/
-config/
-  prompts.yaml
-  policies.json
-docs/
-  architecture.md
-  security.md
-  limitations.md
-examples/
-  standard_request.txt
-  sensitive_request.txt
-src/api_orchestrated_agent/
-  __init__.py
-  config.py
-  orchestrator/
-    execution_policy.py
-  mcp_server/
-    server.py
-tests/
-  test_execution_policy.py
+api-orchestrated-mcp-agent/
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .env.example
+├── requirements.txt
+├── pyproject.toml
+├── assets/
+│   └── screenshots/
+├── config/
+│   ├── prompts.yaml
+│   └── policies.json
+├── data/
+│   └── .gitkeep
+├── docs/
+│   ├── architecture.md
+│   ├── case-study.md
+│   ├── orchestration-loop.md
+│   ├── security.md
+│   ├── technical-decisions.md
+│   ├── limitations.md
+│   └── roadmap.md
+├── examples/
+│   ├── invoice_request.txt
+│   ├── support_request.txt
+│   └── sensitive_request.txt
+├── src/
+│   └── api_orchestrated_agent/
+│       ├── __init__.py
+│       ├── app.py
+│       ├── config.py
+│       ├── orchestrator/
+│       │   ├── __init__.py
+│       │   ├── agent_loop.py
+│       │   ├── mcp_client.py
+│       │   └── execution_policy.py
+│       ├── mcp_server/
+│       │   ├── __init__.py
+│       │   ├── server.py
+│       │   ├── records.py
+│       │   ├── tasks.py
+│       │   └── notifications.py
+│       └── api/
+│           ├── __init__.py
+│           └── routes.py
+├── scripts/
+│   └── run_demo.py
+└── tests/
+    ├── test_execution_policy.py
+    ├── test_orchestrator.py
+    └── test_mcp_tools.py
 ```
 
 ## Setup
@@ -118,10 +143,16 @@ cd api-orchestrated-mcp-agent
 python -m venv .venv
 ```
 
-Activate the environment and install dependencies:
+Activate the environment and install the package:
 
 ```bash
-pip install -r requirements.txt
+# Windows PowerShell
+.\.venv\Scripts\Activate.ps1
+
+# Linux or macOS
+source .venv/bin/activate
+
+pip install -e .
 ```
 
 Create the environment file:
@@ -136,11 +167,70 @@ Set your API key:
 OPENAI_API_KEY=your_api_key
 ```
 
+## Run the MCP server
+
+```bash
+python -m api_orchestrated_agent.mcp_server.server
+```
+
+The local MCP endpoint is available at `http://127.0.0.1:8000/mcp` by default.
+
+## Run the synthetic demo
+
+Keep the MCP server running and open another terminal:
+
+```bash
+python scripts/run_demo.py support_request.txt
+```
+
+Other examples:
+
+```bash
+python scripts/run_demo.py invoice_request.txt
+python scripts/run_demo.py sensitive_request.txt
+```
+
+## Run the optional HTTP API
+
+```bash
+uvicorn api_orchestrated_agent.app:app --host 127.0.0.1 --port 8080
+```
+
+Health check:
+
+```text
+GET http://127.0.0.1:8080/health
+```
+
+Process a request:
+
+```text
+POST http://127.0.0.1:8080/process
+Content-Type: application/json
+
+{
+  "text": "Create a support task for this complete synthetic request.",
+  "source_name": "manual-demo"
+}
+```
+
 ## Run the tests
 
 ```bash
 python -m unittest discover -s tests -v
 ```
+
+The unit tests use fake model responses and local functions, so they do not consume OpenAI tokens.
+
+## Documentation
+
+- [`Case study`](docs/case-study.md)
+- [`Architecture`](docs/architecture.md)
+- [`Orchestration loop`](docs/orchestration-loop.md)
+- [`Technical decisions`](docs/technical-decisions.md)
+- [`Security`](docs/security.md)
+- [`Limitations`](docs/limitations.md)
+- [`Roadmap`](docs/roadmap.md)
 
 ## Security and privacy
 
@@ -154,7 +244,11 @@ This repository intentionally excludes:
 - Generated processing records.
 - Private repository history.
 
-See [`docs/security.md`](docs/security.md) and [`docs/limitations.md`](docs/limitations.md).
+The public notification tool is simulation-only and does not send email or messages to an external recipient.
+
+## Screenshots
+
+Project screenshots can be added under `assets/screenshots/` and linked from this README without mixing visual evidence with source code.
 
 ## Portfolio context
 
