@@ -1,0 +1,7 @@
+Request type: invoice processing
+Supplier: Northwind Demo Services
+Reference: INV-2026-0142
+Amount: 420.50
+Contact: billing@example.test
+
+Please create an internal processing task and save the final record. This is synthetic demo data.
