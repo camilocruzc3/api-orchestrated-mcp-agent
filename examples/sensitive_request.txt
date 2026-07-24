@@ -1,0 +1,6 @@
+Request type: account change
+Requester: Taylor Example
+Sensitive: true
+Data complete: true
+
+The request contains sensitive account instructions. Do not execute a side effect. Redirect the case to human review and save the final record. This is synthetic demo data.
