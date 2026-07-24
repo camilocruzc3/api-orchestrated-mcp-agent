@@ -1,0 +1,7 @@
+Request type: support
+Requester: Jordan Example
+Topic: Unable to access the demonstration dashboard
+Data complete: true
+Sensitive: false
+
+Create a normal-priority support task and save the final processing record. This is synthetic demo data.
