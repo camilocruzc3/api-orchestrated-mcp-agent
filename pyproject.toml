@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "api-orchestrated-mcp-agent"
-version = "0.1.0"
+version = "0.2.0"
 description = "Programmatic AI agent with OpenAI API orchestration, local MCP tools and deterministic execution policies."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -12,6 +12,8 @@ dependencies = [
   "openai>=2.24.0,<3",
   "mcp>=1.26.0,<2",
   "python-dotenv>=1.0.0,<2",
+  "fastapi>=0.115.0,<1",
+  "uvicorn>=0.30.0,<1",
 ]
 
 [tool.setuptools.packages.find]
