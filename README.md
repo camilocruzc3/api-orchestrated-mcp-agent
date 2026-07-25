@@ -246,9 +246,54 @@ This repository intentionally excludes:
 
 The public notification tool is simulation-only and does not send email or messages to an external recipient.
 
-## Screenshots
+## Prototype screenshots
 
-Project screenshots can be added under `assets/screenshots/` and linked from this README without mixing visual evidence with source code.
+The screenshots below come from the original private prototype. They use synthetic examples and demonstrate the same architectural pattern implemented in this public repository: API-based orchestration, MCP tool discovery, deterministic policy checks, human-review fallback and structured results.
+
+The prototype used Spanish, organization-oriented tool names such as `solicitar_revision_manual`, `enviar_a_contabilidad`, `crear_ticket` and `guardar_registro`. The public implementation replaces them with generic English equivalents and simulation-only effects so the code can be shared safely.
+
+### Local agent monitor
+
+The monitor exposes the execution timeline, including document reception, MCP tool discovery, model requests, policy decisions and tool execution.
+
+![Local monitor from the private API-orchestrated MCP prototype](assets/screenshots/01-agent-monitor-overview.png)
+
+### Approved tool execution
+
+This example shows a complete synthetic request for which the local policy permits the action proposed by the model and the tool is executed through MCP.
+
+![Approved tool execution flow from the private prototype](assets/screenshots/03-approved-action-flow.png)
+
+### Policy-controlled human review
+
+This example shows the model proposing an action, the local policy blocking it and the orchestrator redirecting the case to manual review.
+
+![Policy-controlled human review flow from the private prototype](assets/screenshots/04-policy-blocked-flow.png)
+
+<details>
+<summary><strong>View additional private-prototype screenshots</strong></summary>
+
+### Human-review flow
+
+![Human-review workflow](assets/screenshots/02-human-review-flow.png)
+
+### Human-review result
+
+![Structured human-review result](assets/screenshots/05-human-review-result.png)
+
+### Approved action result
+
+![Structured approved-action result](assets/screenshots/06-approved-action-result.png)
+
+### Policy-blocked result
+
+![Structured policy-blocked result](assets/screenshots/07-policy-blocked-result.png)
+
+### Prototype example selector
+
+![Example selector from the private prototype](assets/screenshots/08-example-selector.png)
+
+</details>
 
 ## Portfolio context
 
